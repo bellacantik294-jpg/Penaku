@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Admin Cerpen Tintaku</title>
+
+<!-- Firebase CDN -->
+<script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-storage-compat.js"></script>
+
+<style>
+body {
+  background:#0d1117;
+  color:white;
+  font-family:sans-serif;
+  padding:20px;
+}
+input, textarea, select {
+  width:100%;
+  padding:10px;
+  margin:10px 0;
+  border-radius:6px;
+}
+button {
+  padding:12px 22px;
+  border:none;
+  background:#ff6b6b;
+  color:white;
+  border-radius:6px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Tambah Cerpen Baru</h2>
+
+<label>Judul Cerpen</label>
+<input type="text" id="judul">
+
+<label>Kategori</label>
+<select id="kategori">
+  <option>Romantis</option>
+  <option>Pertemanan</option>
+  <option>Horor</option>
+</select>
+
+<label>Cover Cerita</label>
+<input type="file" id="cover">
+
+<label>Isi Cerpen</label>
+<textarea id="isi" rows="10"></textarea>
+
+<button onclick="simpanCerpen()">Simpan Cerpen</button>
+
+<script>
+// CONFIG FIRBASE KAMU
+const firebaseConfig = {
+  apiKey: "AIzaSyD2-BRqOnFX6o4WDl-ZmYs3M6uuk7srYaM",
+  authDomain: "tintaku-58bcf.firebaseapp.com",
+  projectId: "tintaku-58bcf",
+  storageBucket: "tintaku-58bcf.firebasestorage.app",
+  messagingSenderId: "597580314120",
+  appId: "1:597580314120:web:0a3f9ef923d3df22b183bd",
+  measurementId: "G-TVFEBKGMD0"
+};
+
+// Initialize
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const storage = firebase.storage();
+
+async function simpanCerpen() {
+    const judul = document.getElementById("judul").value;
+    const kategori = document.getElementById("kategori").value;
+    const isi = document.getElementById("isi").value;
+    const fileCover = document.getElementById("cover").files[0];
+
+    if (!judul || !isi) {
+        alert("Judul dan isi tidak boleh kosong!");
+        return;
+    }
+
+    let coverURL = "";
+
+    // Upload cover jika ada
+    if (fileCover) {
+        const ref = storage.ref("covers/" + Date.now() + "_" + fileCover.name);
+        await ref.put(fileCover);
+        coverURL = await ref.getDownloadURL();
+    }
+
+    // Simpan ke Firestore
+    await db.collection("cerpen").add({
+        judul: judul,
+        kategori: kategori,
+        isi: isi,
+        cover: coverURL,
+        dibuat: Date.now()
+    });
+
+    alert("Cerpen berhasil disimpan!");
+}
+</script>
+
+</body>
+</html>
