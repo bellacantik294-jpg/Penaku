@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Tintaku - Cerpen</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site header">
+  <div class="brand"><div class="logo">Ti</div><h1>Tintaku</h1></div>
+  <nav class="nav"><a class="small" href="index.html">Beranda</a> <a class="small" href="cerpen-otomatis.html">Cerpen</a> <a class="small" href="kategori.html">Kategori</a> <a class="small" href="admin.html">Admin</a></nav>
+</header>
+
+<main class="container">
+  <section class="hero">
+    <h2>Selamat datang di Tintaku</h2>
+    <p class="small">Kumpulan cerpen dan puisi — dinamis, dibuat oleh komunitas.</p>
+  </section>
+
+  <section id="cards" class="cards"></section>
+</main>
+
+<footer class="footer">© <span id="year"></span> Tintaku</footer>
+
+<script type="module">
+import { getAllCerpenRandom } from './firebase-user.js';
+const el = document.getElementById('cards');
+async function load(){ const list = await getAllCerpenRandom(); if(!list.length){ el.innerHTML='<p class="small">Belum ada cerpen.</p>'; return;} el.innerHTML=''; list.forEach(c=>{ el.innerHTML += `<article class="card"><img class="cover" src="${c.coverUrl||'images/35157.jpg'}"><h3>${c.title||c.judul}</h3><p class='small'>${c.category||c.kategori}</p><p>${(c.content||c.isi||'').substring(0,120)}...</p><div style='margin-top:10px'><a class='btn' href='detail-cerpen.html?id=${c.id}'>Baca</a></div></article>` }); }
+load();
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
