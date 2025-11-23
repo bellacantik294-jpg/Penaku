@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tintaku — Natural Warm (Full Build)</title>
+  <meta name="description" content="Tintaku - Cerita & Puisi, tema Natural Warm. Aesthetic, reading mode, bookmark, rating, komentar." />
+  <style>
+    /* ===== Palette & Vars (supports light/dark via [data-theme]) ===== */
+    :root{
+      --paper: #f6efe6;
+      --ink: #2a231f;
+      --muted: #8f7f73;
+      --accent: #8b5e3c;
+      --accent-2: #6b8a66;
+      --bg: #f3efe9;
+      --card: #fff6ee;
+      --glass: rgba(9,6,4,0.04);
+      --radius:14px;
+      --shadow: 0 12px 30px rgba(15,11,8,0.06);
+      --max-width:1100px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    /* dark theme */
+    [data-theme="dark"]{
+      --paper:#f6efe6;
+      --ink:#f6efe6;
+      --muted:#bcae9f;
+      --accent:#dbaa7a;
+      --accent-2:#8fb79a;
+      --bg: linear-gradient(180deg,#08120f 0%, #0f1312 100%);
+      --card: rgba(255,255,255,0.03);
+      --glass: rgba(255,255,255,0.03);
+      --shadow: 0 18px 40px rgba(0,0,0,0.6);
+    }
+
+    /* ===== Base ===== */
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
+    a{color:inherit;text-decoration:none}
+    .container{max-width:var(--max-width);margin:28px auto;padding:20px}
+
+    /* ===== Header ===== */
+    header{display:flex;align-items:center;justify-content:space-between;gap:18px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:var(--paper);font-weight:800;box-shadow:var(--shadow)}
+    .title h1{margin:0;font-size:20px}
+    .title p{margin:0;font-size:12px;color:var(--muted)}
+    nav{display:flex;gap:8px;align-items:center}
+    .btn{background:var(--accent);color:var(--paper);padding:10px 14px;border-radius:12px;border:none;cursor:pointer;font-weight:700;box-shadow:0 8px 26px rgba(139,94,60,0.12)}
+    .btn.ghost{background:transparent;border:1px solid rgba(0,0,0,0.06);color:var(--ink)}
+    .small{font-size:13px;color:var(--muted)}
+
+    /* ===== Hero ===== */
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:20px;margin-top:18px;align-items:stretch}
+    .card-hero{background:var(--card);padding:22px;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .card-hero h2{margin:0 0 8px 0}
+    .hero-meta{color:var(--muted);margin-bottom:12px}
+    .search{display:flex;gap:10px;margin-top:14px}
+    .search input{flex:1;padding:12px 14px;border-radius:12px;border:1px solid rgba(0,0,0,0.06);background:transparent}
+    .search button{padding:10px 14px;border-radius:12px;border:none;background:var(--accent);color:var(--paper);font-weight:700}
+
+    .hero-cover{position:relative;border-radius:12px;overflow:hidden;height:100%;min-height:260px;background:linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.03))}
+    .hero-cover img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .9s}
+    .hero-cover:hover img{transform:scale(1.04)}
+    .hero-tag{position:absolute;left:16px;bottom:16px;background:rgba(0,0,0,0.35);padding:8px 12px;border-radius:999px;color:var(--paper);font-weight:700}
+
+    /* ===== Featured carousel ===== */
+    .carousel{margin-top:16px;display:flex;gap:12px;overflow:hidden;padding-bottom:10px}
+    .slide{min-width:220px;flex:0 0 auto;border-radius:12px;overflow:hidden;background:var(--card);box-shadow:var(--shadow);cursor:pointer}
+    .slide img{width:100%;height:130px;object-fit:cover;display:block}
+    .slide .meta{padding:10px}
+    .slide .meta h4{margin:0 0 6px 0;font-size:15px}
+    .slide .meta p{margin:0;color:var(--muted);font-size:13px}
+
+    /* ===== Controls (filters) ===== */
+    .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px}
+    .chip{padding:8px 12px;border-radius:10px;background:var(--glass);color:var(--muted);cursor:pointer;border:1px solid rgba(0,0,0,0.04)}
+
+    /* ===== Grid ===== */
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:18px}
+    .story-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));border-radius:12px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+    .story-cover{height:160px;overflow:hidden}
+    .story-cover img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+    .story-card:hover .story-cover img{transform:scale(1.06)}
+    .story-body{padding:12px;flex:1;display:flex;flex-direction:column}
+    .story-category{color:var(--muted);font-size:12px;margin-bottom:6px}
+    .story-body h3{margin:0 0 8px 0;font-size:18px}
+    .excerpt{color:var(--muted);flex:1;font-size:14px}
+    .story-actions{display:flex;gap:8px;align-items:center;margin-top:12px}
+    .ico{background:transparent;border:1px solid rgba(0,0,0,0.06);padding:8px;border-radius:10px;cursor:pointer}
+
+    /* ===== Footer ===== */
+    footer{margin-top:28px;color:var(--muted);font-size:13px;text-align:center}
+
+    /* ===== Reader modal ===== */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:9999;padding:28px}
+    .modal.show{display:flex}
+    .reader{width:100%;max-width:900px;height:90vh;background:var(--paper);border-radius:14px;overflow:auto;padding:28px;color:var(--ink);box-shadow:0 30px 60px rgba(0,0,0,0.6)}
+    .reader h1{margin-top:0;color:var(--accent)}
+    .reader .meta{color:var(--muted);margin-bottom:18px}
+    .reader .controls{display:flex;gap:8px;align-items:center;margin-bottom:18px}
+    .reading-settings{display:flex;gap:8px;align-items:center;margin-left:auto}
+
+    /* ===== Comments ===== */
+    .comments{margin-top:18px;border-top:1px dashed rgba(0,0,0,0.06);padding-top:14px}
+    .comment{background:rgba(0,0,0,0.02);padding:10px;border-radius:10px;margin-bottom:8px}
+    .comment small{color:var(--muted)}
+    .input-row{display:flex;gap:8px;margin-top:8px}
+    .input-row input, .input-row textarea{flex:1;padding:8px;border-radius:8px;border:1px solid rgba(0,0,0,0.06)}
+
+    /* ===== Responsive ===== */
+    @media (max-width:980px){ .hero{grid-template-columns:1fr} .hero-cover{height:220px} }
+    @media (max-width:520px){ .carousel{overflow-x:auto} .slide{min-width:180px} }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="app">
+    <header>
+      <div class="brand">
+        <div class="logo">T</div>
+        <div class="title">
+          <h1>Tintaku</h1>
+          <p class="small">Cerita & Puisi — Natural Warm</p>
+        </div>
+      </div>
+
+      <nav>
+        <button class="btn ghost" id="themeToggle">Mode</button>
+        <button class="btn" id="writeBtn">Tulis Cerita</button>
+      </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="card-hero">
+        <div class="hero-meta small">Selamat datang • Pilih cerita, mode baca, atau simpan untuk nanti</div>
+        <h2>Rumah Cerita Hangat</h2>
+        <p class="small">Kumpulan cerpen & puisi bergaya hangat dan vintage. Reading mode nyaman untuk malam.</p>
+
+        <div class="search" style="margin-top:12px">
+          <input id="searchInput" placeholder="Cari judul, kategori, atau kata..." />
+          <button onclick="applySearch()">Cari</button>
+        </div>
+
+        <div class="controls" id="controls">
+          <!-- kategori akan diinject -->
+        </div>
+
+        <div class="carousel" id="carousel">
+          <!-- featured slides inject -->
+        </div>
+      </div>
+
+      <aside class="hero-cover">
+        <!-- local image (user-uploaded). If hosting on GitHub, upload the same image there and ubah path -->
+        <img id="heroImg" src="/mnt/data/36764.png" alt="Hero Cover" onerror="this.src='https://via.placeholder.com/720x420?text=Tintaku'"/>
+        <div class="hero-tag">Featured • Romantis</div>
+      </aside>
+    </section>
+
+    <!-- GRID -->
+    <section>
+      <h2 style="margin-top:18px">Cerpen Terbaru</h2>
+      <div class="grid" id="grid"></div>
+    </section>
+
+    <footer>
+      © Tintaku • Dibuat untuk pecinta cerita — Theme: Natural Warm
+    </footer>
+  </div>
+
+  <!-- READER MODAL -->
+  <div class="modal" id="modal">
+    <div class="reader" role="dialog" aria-modal="true">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="flex:1">
+          <h1 id="r-title">Judul</h1>
+          <div class="meta" id="r-meta">Kategori • Tintaku</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="ico" onclick="closeReader()">Tutup</button>
+          <div class="reading-settings">
+            <label class="small">A+</label><button class="ico" onclick="changeFontSize(1)">A</button>
+            <button class="ico" onclick="changeFontSize(-1)">A-</button>
+            <button class="ico" id="toggleReadBG" onclick="toggleReadBG()">BG</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="r-cover" style="margin-top:14px"><img id="r-cover-img" src="" alt="" style="max-width:100%;border-radius:10px;"/></div>
+      <article id="r-content" style="margin-top:18px;line-height:1.9;color:inherit"></article>
+
+      <!-- likes & rating -->
+      <div style="display:flex;gap:8px;align-items:center;margin-top:18px">
+        <button class="ico" id="likeBtn" onclick="toggleLike(r_currentId)">❤ <span id="likeCount">0</span></button>
+        <div style="display:flex;align-items:center;gap:6px">
+          <span class="small">Rating:</span>
+          <div id="ratingStars" style="display:flex;gap:4px"></div>
+        </div>
+      </div>
+
+      <!-- comments -->
+      <div class="comments" id="commentsSection">
+        <h4>Komentar</h4>
+        <div id="commentsList"></div>
+
+        <div style="margin-top:8px">
+          <div class="input-row">
+            <input id="commentName" placeholder="Nama (opsional)"/>
+            <textarea id="commentText" rows="2" placeholder="Tulis komentar..."></textarea>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:8px;justify-content:flex-end">
+            <button class="btn ghost" onclick="closeReader()">Batal</button>
+            <button class="btn" onclick="postComment()">Kirim</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    /* =================== Data sample (ganti/extend sesuai kebutuhan) =================== */
+    const STORIES_KEY = 'tintaku_stories_v1';
+    const SAVES_KEY = 'tintaku_saves_v1';
+    const LIKES_KEY = 'tintaku_likes_v1';
+    const RATING_KEY = 'tintaku_ratings_v1';
+    const COMMENTS_KEY = 'tintaku_comments_v1';
+    // Seed stories (one uses your local image path)
+    const seedStories = [
+      {
+        id: 1,
+        title: 'Restu yang tertinggal',
+        category: 'Romantis',
+        excerpt: 'Angin sore di halaman sekolah selalu punya cara sendiri buat bikin orang jadi mellow...',
+        cover: '/mnt/data/36764.png',
+        content: `Angin sore di halaman sekolah selalu punya cara sendiri buat bikin orang jadi mellow. Sampai suatu hari, gue akhirnya nekat nembak dia...` // truncated; extend if perlu
+      },
+      {
+        id: 2,
+        title: 'Surat dari Musim Semi',
+        category: 'Slice of Life',
+        excerpt: 'Musim semi datang membawa surat yang belum sempat dibaca...',
+        cover: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=900&q=60',
+        content: 'Musim semi mengirimkan secarik kertas yang tua...'
+      },
+      {
+        id: 3,
+        title: 'Kopi dan Senja',
+        category: 'Persahabatan',
+        excerpt: 'Mereka duduk, menyeruput kopi, dan mengingat janji malam itu...',
+        cover: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=900&q=60',
+        content: 'Kopi hangat, senja, dan dua sahabat yang pernah berjanji...'
+      }
+    ];
+
+    /* =================== Utilities: localStorage seed =================== */
+    function readLS(k){
+      try{return JSON.parse(localStorage.getItem(k) || 'null')}
+      catch(e){return null}
+    }
+    function writeLS(k,v){ localStorage.setItem(k, JSON.stringify(v)) }
+
+    // Seed stories on first run
+    if(!readLS(STORIES_KEY)){ writeLS(STORIES_KEY, seedStories) }
+
+    /* =================== App state & helpers =================== */
+    let stories = readLS(STORIES_KEY) || seedStories;
+    let saves = readLS(SAVES_KEY) || [];
+    let likes = readLS(LIKES_KEY) || {}; // {id: count}
+    let ratings = readLS(RATING_KEY) || {}; // {id: {sum: n, count: m}}
+    let comments = readLS(COMMENTS_KEY) || {}; // {id: [{name, text, createdAt}]}
+    let currentTheme = localStorage.getItem('tintaku_theme') || 'light';
+    document.documentElement.setAttribute('data-theme', currentTheme === 'dark' ? 'dark' : 'light');
+
+    /* =================== Render controls (categories & carousel) =================== */
+    const categories = ['Semua','Romantis','Slice of Life','Persahabatan','Misteri','Horor','Komedi'];
+    const controlsEl = document.getElementById('controls');
+    categories.forEach(cat => {
+      const btn = document.createElement('div');
+      btn.className='chip';
+      btn.textContent = cat;
+      btn.onclick = ()=>{ applyFilter(cat) };
+      controlsEl.appendChild(btn);
+    });
+
+    // Carousel (featured = first 3)
+    function renderCarousel(){
+      const cr = document.getElementById('carousel');
+      cr.innerHTML = '';
+      stories.slice(0,4).forEach(s=>{
+        const slide = document.createElement('div'); slide.className='slide';
+        slide.innerHTML = `<img src="${s.cover}" alt="${s.title}" onerror="this.src='https://via.placeholder.com/420x240?text=No+Image'"/><div class="meta"><h4>${s.title}</h4><p>${s.excerpt}</p></div>`;
+        slide.onclick = ()=> openReader(s.id);
+        cr.appendChild(slide);
+      });
+    }
+
+    /* =================== Grid render =================== */
+    function renderGrid(list = stories){
+      const grid = document.getElementById('grid'); grid.innerHTML = '';
+      if(list.length===0){ grid.innerHTML = `<div style="padding:18px;color:var(--muted)">Tidak ada cerita.</div>`; return; }
+      list.forEach(s=>{
+        const card = document.createElement('div'); card.className='story-card';
+        card.innerHTML = `
+          <div class="story-cover"><img src="${s.cover}" alt="${s.title}" onerror="this.src='https://via.placeholder.com/640x360?text=No+Image'"/></div>
+          <div class="story-body">
+            <div class="story-category">${s.category}</div>
+            <h3>${s.title}</h3>
+            <div class="excerpt">${s.excerpt}</div>
+            <div class="story-actions">
+              <button class="btn" onclick="openReader(${s.id})">Baca</button>
+              <button class="ico" onclick="toggleSave(${s.id}, this)">${saves.includes(s.id)?'Tersimpan':'Simpan'}</button>
+              <button class="ico" onclick="toggleLike(${s.id})">❤ ${likes[s.id]||0}</button>
+              <div style="margin-left:auto;color:var(--muted);font-size:13px">ID: ${s.id}</div>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    /* =================== Search & Filter =================== */
+    function applySearch(){
+      const q = document.getElementById('searchInput').value.trim().toLowerCase();
+      const filtered = stories.filter(s => {
+        return s.title.toLowerCase().includes(q) || (s.excerpt && s.excerpt.toLowerCase().includes(q)) || (s.content && s.content.toLowerCase().includes(q));
+      });
+      renderGrid(filtered);
+    }
+    function applyFilter(cat){
+      if(cat === 'Semua'){ renderGrid(); return; }
+      renderGrid(stories.filter(s => s.category === cat));
+    }
+
+    /* =================== Bookmark (localStorage) =================== */
+    function toggleSave(id, btnEl){
+      if(!saves.includes(id)){ saves.push(id); if(btnEl) btnEl.textContent='Tersimpan'; }
+      else { saves = saves.filter(x=>x!==id); if(btnEl) btnEl.textContent='Simpan'; }
+      writeLS(SAVES_KEY, saves);
+    }
+
+    /* =================== Like & Rating =================== */
+    function toggleLike(id){
+      likes[id] = (likes[id]||0) + 1;
+      writeLS(LIKES_KEY, likes);
+      renderGrid();
+    }
+    function getRatingUI(id, container){
+      container.innerHTML = '';
+      const r = ratings[id] || {sum:0,count:0};
+      const avg = r.count ? Math.round((r.sum / r.count)) : 0;
+      for(let i=1;i<=5;i++){
+        const star = document.createElement('button'); star.className='ico';
+        star.textContent = i <= avg ? '★' : '☆';
+        star.onclick = ()=>{ submitRating(id,i); getRatingUI(id, container); }
+        container.appendChild(star);
+      }
+      const txt = document.createElement('div'); txt.style.marginLeft='8px'; txt.style.color='var(--muted)'; txt.style.fontSize='13px';
+      txt.textContent = r.count ? `(${(r.sum/r.count).toFixed(1)} / ${r.count})` : '(belum dinilai)';
+      container.appendChild(txt);
+    }
+    function submitRating(id, val){
+      if(!ratings[id]) ratings[id] = {sum:0,count:0};
+      ratings[id].sum += val; ratings[id].count += 1;
+      writeLS(RATING_KEY, ratings);
+    }
+
+    /* =================== Reader Modal =================== */
+    let r_currentId = null;
+    function openReader(id){
+      const s = stories.find(x=>x.id===id); if(!s) return alert('Cerita tidak ditemukan');
+      r_currentId = id;
+      document.getElementById('r-title').textContent = s.title;
+      document.getElementById('r-meta').textContent = `${s.category} • Tintaku`;
+      document.getElementById('r-cover-img').src = s.cover;
+      document.getElementById('r-content').textContent = s.content || s.excerpt || '';
+      document.getElementById('modal').classList.add('show');
+
+      // likes
+      document.getElementById('likeCount').textContent = likes[id] || 0;
+      // rating UI
+      const ratingContainer = document.getElementById('ratingStars'); getRatingUI(id, ratingContainer);
+      // comments render
+      renderComments(id);
+    }
+    function closeReader(){ document.getElementById('modal').classList.remove('show'); }
+
+    /* reading utilities */
+    let readFont = 16;
+    function changeFontSize(delta){
+      readFont = Math.max(14, readFont + delta);
+      document.getElementById('r-content').style.fontSize = readFont + 'px';
+    }
+    function toggleReadBG(){
+      const r = document.querySelector('.reader');
+      if(r.style.background === 'var(--paper)'){ r.style.background = '#f6efe6'; } // noop
+      r.classList.toggle('altBG');
+      // minimal for now
+    }
+
+    /* =================== Comments (localStorage simple) =================== */
+    function renderComments(id){
+      const list = comments[id] || [];
+      const out = document.getElementById('commentsList'); out.innerHTML = '';
+      if(list.length===0){ out.innerHTML = '<div style="color:var(--muted)">Belum ada komentar.</div>'; return; }
+      list.slice().reverse().forEach(c=>{
+        const el = document.createElement('div'); el.className='comment';
+        el.innerHTML = `<strong>${escapeHtml(c.name || 'Anonim')}</strong> <small>• ${new Date(c.createdAt).toLocaleString()}</small><div style="margin-top:6px">${escapeHtml(c.text)}</div>`;
+        out.appendChild(el);
+      });
+    }
+    function postComment(){
+      const name = document.getElementById('commentName').value.trim();
+      const text = document.getElementById('commentText').value.trim();
+      if(!text) return alert('Komentar kosong');
+      if(!comments[r_currentId]) comments[r_currentId] = [];
+      comments[r_currentId].push({name, text, createdAt: Date.now()});
+      writeLS(COMMENTS_KEY, comments);
+      document.getElementById('commentText').value = '';
+      renderComments(r_currentId);
+    }
+    function escapeHtml(s){ return s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+
+    /* =================== Theme toggle =================== */
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.onclick = ()=>{
+      currentTheme = (document.documentElement.getAttribute('data-theme') === 'dark') ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', currentTheme === 'dark' ? 'dark' : 'light');
+      localStorage.setItem('tintaku_theme', currentTheme === 'dark' ? 'dark' : 'light');
+    };
+
+    /* =================== Write button (simple modal placeholder) =================== */
+    document.getElementById('writeBtn').onclick = ()=>{
+      const title = prompt('Judul cerita (contoh):');
+      if(!title) return;
+      const category = prompt('Kategori (ex: Romantis):','Slice of Life');
+      const excerpt = prompt('Excerpt singkat:','Sebuah cerita ringan...');
+      const cover = prompt('URL cover (biarkan kosong untuk placeholder):','');
+      const id = Date.now();
+      stories.unshift({id,title,category,excerpt,cover:cover||'https://via.placeholder.com/900x500?text=Cover',content:excerpt});
+      writeLS(STORIES_KEY, stories);
+      renderCarousel(); renderGrid();
+      alert('Cerita ditambahkan (disimpan local). Untuk publish permanen, tambahkan ke repo Anda.');
+    };
+
+    /* =================== Init render =================== */
+    renderCarousel();
+    renderGrid();
+
+    // keyboard: Esc to close reader
+    document.addEventListener('keydown', e => { if(e.key === 'Escape') closeReader(); });
+
+    /* keep LS copies updated when actions happen (simple autosave) */
+    window.addEventListener('beforeunload', ()=> {
+      writeLS(STORIES_KEY, stories);
+      writeLS(SAVES_KEY, saves);
+      writeLS(LIKES_KEY, likes);
+      writeLS(RATING_KEY, ratings);
+      writeLS(COMMENTS_KEY, comments);
+    });
+
+  </script>
+</body>
+</html>
