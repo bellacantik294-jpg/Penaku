@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tintaku - Cerpen</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0d1117;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+
+    header {
+      background: #161b22;
+      padding: 20px;
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    .story-card {
+      background: #161b22;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .story-card:hover {
+      background: #1f2733;
+    }
+
+    .title {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .category {
+      color: #58a6ff;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 13px;
+      color: #8b949e;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  Tintaku – Cerpen
+</header>
+
+<div class="container">
+  <h2>Cerpen Terbaru</h2>
+  <div id="story-list"></div>
+</div>
+
+<div class="footer">
+  © 2025 Tintaku
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyD2-BRqOnFX6o4WDl-ZmYs3M6uuk7srYaM",
+    authDomain: "tintaku-58bcf.firebaseapp.com",
+    projectId: "tintaku-58bcf",
+    storageBucket: "tintaku-58bcf.firebasestorage.app",
+    messagingSenderId: "597580314120",
+    appId: "1:597580314120:web:0a3f9ef923d3df22b183bd",
+    measurementId: "G-TVFEBKGMD0"
+  };
+
+  const app = firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  const storyList = document.getElementById("story-list");
+
+  db.collection("cerpen").orderBy("tanggal", "desc").onSnapshot((snapshot) => {
+    storyList.innerHTML = "";
+
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+
+      const card = document.createElement("div");
+      card.className = "story-card";
+      card.innerHTML = `
+        <div class="title">${data.judul}</div>
+        <div class="category">${data.kategori}</div>
+      `;
+
+      storyList.appendChild(card);
+    });
+  });
+</script>
+
+</body>
+</html>
